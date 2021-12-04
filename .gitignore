@@ -1,4 +1,5 @@
-piii/secrets
+secrets
+set_env.sh
 
 venv/
 
