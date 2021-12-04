@@ -4,8 +4,4 @@ pyrebase
 flask-firebase-admin
 requests>=2.24.0
 requests-oauthlib>=1.3.0
-tweepy[async]
-bs4
-beautifulsoup4>=4.6.0
 imagehash>=4.2.1
-Selenium

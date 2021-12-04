@@ -1,11 +1,11 @@
 # PI3 backend for scanning social media profile similarities
 
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 
 import lib.db
 import lib.scanner.twitter.twitter as twit
-import lib.scanner.twitter.bsoup as bsoup
+import lib.scanner.twitter.comparitor as comparator
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -20,18 +20,18 @@ def hello():
     return "hello! Welcome to PIII!"
 
 
-@app.route("/soup/test")
-def soup_test():
-    return bsoup.search_by_displayname("Robyn Thomas")
+@app.route("/scan/twitter/<app_user>/<twitter_user>")
+def scan_twitter(app_user, twitter_user):
+    user_account = twit.get_user_profile_data(twitter_user)
+    similar_accounts = twit.search_by_username(twitter_user)
+    cases = comparator.check_duplicates(
+        user_account.json(), similar_accounts.json())
 
-
-@app.route("/scan/twitter/displayname/<username>")
-def scan_twitter(username):
-    print("Searching for: " + username)
-    accounts = twit.search_by_username(username)
-    flaged = check_duplicates(user_id, accounts)
-
-    return users.json()
+    for case in cases:
+        # Add cases to firestore
+        lib.db.add_cases(db_conn, app_user,
+                         "https://twitter.com/" + case['username'])
+    return Response("{}", status=200, mimetype='application/json')
 
 
 port = int(os.environ.get('PORT', 8080))

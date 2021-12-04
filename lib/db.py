@@ -7,7 +7,7 @@ CRED_CERTIFICATE_PATH = "secrets/piii-74022-firebase-adminsdk.json"
 
 def create_connection():
     cred = credentials.Certificate(CRED_CERTIFICATE_PATH)
-    default_app = initialize_app(cred)
+    initialize_app(cred)
     db = firestore.client()
     return db
 
