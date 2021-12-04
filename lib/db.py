@@ -16,6 +16,9 @@ def get_collection(db, collection_name):
     return db.collection(collection_name)
 
 
-def add_cases(db, user, cases):
-    # db.collection("users/" + str(user) + "/cases" + case)
-    return
+def add_cases(db, user, link):
+    return db.collection("users").document(user).collection('cases').add({
+        'status': 'open',
+        'link': link
+    })
+    
