@@ -2,6 +2,7 @@
 
 import os
 from flask import Flask, request, jsonify, Response
+from flask_cors import CORS, cross_origin
 
 import lib.db
 import lib.scanner.twitter.twitter as twit
@@ -9,6 +10,8 @@ import lib.scanner.twitter.comparitor as comparator
 
 # Initialize Flask app
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Init firestore connection:
 db_conn = lib.db.create_connection()
@@ -16,11 +19,13 @@ user_ref = lib.db.get_collection(db_conn, 'users')
 
 
 @app.route("/hello")
+@cross_origin()
 def hello():
     return "hello! Welcome to PIII!"
 
 
 @app.route("/twitter/scan/<app_user>/<twitter_user>")
+@cross_origin()
 def scan_twitter(app_user, twitter_user):
     user_account = twit.get_user_profile_data(twitter_user)
     similar_accounts = twit.search_by_username(twitter_user)
@@ -34,6 +39,7 @@ def scan_twitter(app_user, twitter_user):
     return Response("{}", status=200, mimetype='application/json')
 
 @app.route("/twitter/add_profile/<app_user>/<twitter_handle>")
+@cross_origin()
 def link_twitter_profile(app_user, twitter_handle):
     user_account = twit.get_user_profile_data(twitter_handle)
     user_account = user_account.json()
