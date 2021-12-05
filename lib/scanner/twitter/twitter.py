@@ -1,7 +1,6 @@
 # This is a library to fetch tweets before scanning them
 
 import requests
-import tweepy
 
 from lib.demo.user_ids import jayan_ids
 

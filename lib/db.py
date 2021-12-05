@@ -22,3 +22,12 @@ def add_cases(db, user, link):
         'link': link
     })
     
+def add_twitter_account(db, user, account_details):
+    return db.collection("users").document(user).update({
+        'accounts': [{
+            'type': 'twitter',
+            'handle': account_details['username'],
+            'displayName': account_details['name'],
+            'profilePicture': account_details['profile_image_url']
+        }]
+    })

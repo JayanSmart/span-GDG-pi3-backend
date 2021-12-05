@@ -20,7 +20,7 @@ def hello():
     return "hello! Welcome to PIII!"
 
 
-@app.route("/scan/twitter/<app_user>/<twitter_user>")
+@app.route("/twitter/scan/<app_user>/<twitter_user>")
 def scan_twitter(app_user, twitter_user):
     user_account = twit.get_user_profile_data(twitter_user)
     similar_accounts = twit.search_by_username(twitter_user)
@@ -33,6 +33,12 @@ def scan_twitter(app_user, twitter_user):
                          "https://twitter.com/" + case['username'])
     return Response("{}", status=200, mimetype='application/json')
 
+@app.route("/twitter/add_profile/<app_user>/<twitter_handle>")
+def link_twitter_profile(app_user, twitter_handle):
+    user_account = twit.get_user_profile_data(twitter_handle)
+    user_account = user_account.json()
+    lib.db.add_twitter_account(db_conn, app_user, user_account['data'])
+    return user_account
 
 port = int(os.environ.get('PORT', 8080))
 if __name__ == '__main__':
